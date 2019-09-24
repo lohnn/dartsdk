@@ -104,6 +104,47 @@ class Duration implements Comparable<Duration> {
             microsecondsPerMillisecond * milliseconds +
             microseconds);
 
+  /**
+   * Creates a `Duration` object from an ISO8601 formatted string.
+   *
+   * This method parses out a subset of the ISO8601 duration format. As years
+   * and months are not of a set length this method does not support that. We
+   * are then left with support for weeks, days, hours, minutes and seconds.
+   */
+  static Duration fromISO8601(String duration) {
+    if (!RegExp(r"^P((\d+W)?(\d+D)?)(T(\d+H)?(\d+M)?(\d+S)?)?$")
+        .hasMatch(duration)) {
+      throw ArgumentError("String does not follow correct format");
+    }
+
+    final weeks = _parseTime(duration, "W");
+    final days = _parseTime(duration, "D");
+    final hours = _parseTime(duration, "H");
+    final minutes = _parseTime(duration, "M");
+    final seconds = _parseTime(duration, "S");
+
+    return Duration(
+      days: days + (weeks * 7),
+      hours: hours,
+      minutes: minutes,
+      seconds: seconds,
+    );
+  }
+
+  /**
+   * Private helper method for extracting a time value from the ISO8601 string.
+   */
+  static int _parseTime(String duration, String timeUnit) {
+    final timeMatch = RegExp(r"\d+" + timeUnit).firstMatch(duration);
+
+    if (timeMatch == null) {
+      return 0;
+    }
+    final timeString = timeMatch.group(0);
+    return int.parse(timeString.substring(0, timeString.length - 1));
+  }
+
+
   // Fast path internal direct constructor to avoids the optional arguments and
   // [_microseconds] recomputation.
   const Duration._microseconds(this._duration);

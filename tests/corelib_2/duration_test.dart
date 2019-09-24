@@ -290,4 +290,36 @@ main() {
 
   Expect.equals(d2, -d1);
   Expect.equals(d1, -d2);
+
+  //Testing fromISO8601
+  Expect.equals(Duration.fromISO8601("PT9H32M"), Duration(hours: 9, minutes: 32));
+  Expect.equals(Duration.fromISO8601("PT23H40M"), Duration(hours: 23, minutes: 40));
+  Expect.equals(Duration.fromISO8601("PT1H04M"), Duration(hours: 1, minutes: 4));
+  Expect.equals(Duration.fromISO8601("PT10H5M"), Duration(hours: 10, minutes: 5));
+  Expect.equals(Duration.fromISO8601("PT04H15M"), Duration(hours: 4, minutes: 15));
+
+  Expect.equals(Duration.fromISO8601("PT32M"), Duration(minutes: 32));
+  Expect.equals(Duration.fromISO8601("PT40M"), Duration(minutes: 40));
+  Expect.equals(Duration.fromISO8601("PT04M"), Duration(minutes: 4));
+  Expect.equals(Duration.fromISO8601("PT5M"), Duration(minutes: 5));
+  Expect.equals(Duration.fromISO8601("PT15M"), Duration(minutes: 15));
+
+  Expect.equals(Duration.fromISO8601("P3D"), Duration(days: 3));
+  Expect.equals(Duration.fromISO8601("P08D"), Duration(days: 8));
+  Expect.equals(Duration.fromISO8601("P101D"), Duration(days: 101));
+
+  Expect.equals(
+    Duration.fromISO8601("P4DT12H30M5S"),
+    Duration(days: 4, hours: 12, minutes: 30, seconds: 5),
+  );
+
+  Expect.equals(
+    Duration.fromISO8601("P00411DT120H320M51S"),
+    Duration(days: 411, hours: 120, minutes: 320, seconds: 51),
+  );
+
+  Expect.equals(
+    Duration.fromISO8601("P2W1DT1H10M1S"),
+    Duration(days: 15, hours: 1, minutes: 10, seconds: 1),
+  );
 }
